@@ -1,64 +1,54 @@
-# Android Games — Hit Game Predictor
+# NTI Project — Android Games Hit Predictor 🎮
 
-A machine learning project that predicts whether an Android game will become a "hit" based on its market, monetization, and engagement metrics. The project includes a full data pipeline — cleaning, feature engineering, feature selection — and trains/compares multiple classification models.
+A machine learning project that predicts whether an Android game will become a "hit," based on its data (downloads, revenue, ratings, genre, monetization model, etc.).
 
-## Project Structure
+## 📂 Project Structure
 
 ```
-nti-project-main/
-├── knkm.ipynb                        # Core notebook: EDA, cleaning, feature engineering, modeling
-├── android_games_modeling_v3.ipynb   # Extended modeling notebook
-├── app.py                            # Interactive Streamlit app for the same pipeline
-└── requirements.txt
+nti-project/
+├── README.md
+├── requirements.txt
+├── android_games_eda_ready.csv      # Dataset
+├── knkm.ipynb                       # Main notebook: EDA + model training
+├── android_games_modeling_v3.ipynb  # Alternate analysis/modeling notebook
+└── app.py                           # Interactive Streamlit app with the same pipeline
 ```
 
-## Overview
+## 🗂️ Dataset
 
-The pipeline takes a raw dataset (`android_games_eda_ready.csv`) and walks through:
+`android_games_eda_ready.csv` is sourced from Kaggle:
+[Android Games EDA Ready Dataset](https://www.kaggle.com/datasets/tsmgofficial/android-games-eda-ready-dataset)
 
-1. **Data Cleaning** — drops ID-like columns, removes duplicates, handles missing soft-launch dates, removes leakage-prone columns (post-launch revenue, downloads, etc.).
-2. **Train/Test Split** — stratified split on the target `is_hit_game`.
-3. **Missing Value Imputation** — median imputation (fit on train only) for numeric fields like marketing spend, CPI, and ARPPU.
-4. **Feature Engineering** — developer frequency encoding, categorical frequency encoding.
-5. **Outlier Handling** — IQR-based capping on numeric features.
-6. **Transformations** — log1p transform on skewed features, standard scaling on the rest.
-7. **Feature Selection** — removes multicollinear and weakly-correlated features, ranks remaining features with Mutual Information.
-8. **Model Training & Comparison** — trains and compares:
-   - Logistic Regression
-   - Random Forest
-   - XGBoost
+## 🔄 Pipeline Steps
 
-Each model is evaluated with Accuracy, Precision, Recall, F1-score, and a confusion matrix, with the best model selected by F1-score.
+1. **Data cleaning**: drop ID-like columns and duplicates, drop data-leakage columns (e.g., actual revenue and downloads).
+2. **Train/test split** with stratification to preserve class balance.
+3. **Missing value imputation** using the median.
+4. **Feature engineering**: convert developer name into a developer-game-count feature, frequency-encode categorical columns.
+5. **Outlier handling** using the IQR method.
+6. **Feature selection**: drop columns with high multicollinearity or weak correlation with the target, and display Mutual Information scores.
+7. **Model training and comparison**: Logistic Regression, Random Forest, and XGBoost — reporting Accuracy/Precision/Recall/F1 for each and selecting the best one.
 
-## Running the App
+## 🚀 Running the Project
 
 ```bash
 pip install -r requirements.txt
 streamlit run app.py
 ```
 
-Upload `android_games_eda_ready.csv` from the sidebar to run the pipeline interactively — every step (cleaning, splitting, feature engineering, model training) is configurable and visualized in the browser.
+After launching, upload `android_games_eda_ready.csv` from the sidebar in the app.
 
-## Running the Notebooks
+## 📓 Notebooks
 
-Open `knkm.ipynb` or `android_games_modeling_v3.ipynb` in Jupyter Notebook, JupyterLab, or VS Code.
+- `knkm.ipynb`: original full analysis and experiments.
+- `android_games_modeling_v3.ipynb`: additional analysis/modeling notebook.
 
-## Requirements
+## 🤖 Models
 
-```
-pandas
-numpy
-matplotlib
-seaborn
-streamlit
-scikit-learn
-xgboost
-```
+| Model | Notes |
+|---|---|
+| Logistic Regression | `class_weight='balanced'` |
+| Random Forest | `n_estimators=200`, `max_depth=20` |
+| XGBoost | `scale_pos_weight` to balance classes |
 
-## Target Variable
-
-`is_hit_game` — binary label indicating whether the game achieved hit status.
-
-## License
-
-For educational/portfolio use.
+The best model is automatically selected based on the highest F1-score.
