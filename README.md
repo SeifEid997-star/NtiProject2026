@@ -36,6 +36,12 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 
+If the `streamlit` command is not recognized (common on Windows), run it as a Python module instead:
+
+```bash
+python -m streamlit run app.py
+```
+
 After launching, upload `android_games_eda_ready.csv` from the sidebar in the app.
 
 ## 📓 Notebooks
