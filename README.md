@@ -10,7 +10,6 @@ nti-project/
 ├── requirements.txt
 ├── android_games_eda_ready.csv      # Dataset
 ├── knkm.ipynb                       # Main notebook: EDA + model training
-├── android_games_modeling_v3.ipynb  # Alternate analysis/modeling notebook
 └── app.py                           # Interactive Streamlit app with the same pipeline
 ```
 
